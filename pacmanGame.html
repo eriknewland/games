@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My First Web Browser Game v3</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+    }
+    #game-container {
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+    #player {
+      width: 50px;
+      height: 50px;
+      background-color: #000;
+      position: absolute;
+    }
+    #target {
+      width: 25px;
+      height: 25px;
+      background-color: #0f0;
+      position: absolute;
+      border-radius: 100%
+    }
+    @keyframes eat {
+  0% {
+    clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+  25% {
+    clip-path: polygon(100% 60%, 44% 48%, 100% 40%);
+  }
+  50% {
+    clip-path: polygon(100% 50%, 44% 48%, 100% 50%);
+  }
+  75% {
+    clip-path: polygon(100% 59%, 44% 48%, 100% 35%);
+  }
+  100% {
+    clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+}
+    .pacman {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #f2d648;
+  position: relative;
+  margin-top: 20px;
+  /* transform: rotate(90deg); */
+}
+
+.pacman__eye {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 20px;
+  right: 40px;
+  background: #333333;
+}
+
+.pacman__mouth {
+  background: #fff;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  animation-name: eat;
+animation-duration: 0.7s;
+animation-iteration-count: infinite;
+}
+
+  </style>
+</head>
+<body>
+  <h1>My Web Browser Game</h1>
+  <div id="game-container">
+    <div class="pacman">
+      <div class="pacman__eye"></div>
+      <div class="pacman__mouth"></div>
+    </div>
+    <div id="target"></div>
+  </div>
+  <div id="score"></div>
+  <script>
+    let score = 0;
+    let scoreDiv = document.getElementById('score');
+    // Get the game container
+    const gameContainer = document.getElementById('game-container');
+    // Get the player
+    const player = document.querySelector('.pacman');
+    // Get the target
+    const target = document.getElementById('target');
+    // Set the initial position of the player
+    let playerX = 0;
+    let playerY = 0;
+    // Set the speed of the player
+    const speed = 10;
+    // Set the boundaries of the game container
+    const maxX = gameContainer.offsetWidth - player.offsetWidth;
+    const maxY = gameContainer.offsetHeight - player.offsetHeight;
+    // Generate a random position for the target
+    let targetX = Math.floor(Math.random() * maxX);
+    let targetY = Math.floor(Math.random() * maxY);
+    // Update the target's position
+    target.style.left = targetX + 'px';
+    target.style.top = targetY + 'px';
+    // Listen for key presses
+    document.addEventListener('keydown', (e) => {
+      // Move the player
+      switch (e.keyCode) {
+        case 37: // left
+          playerX = Math.max(0, playerX - speed);
+          document.querySelector('.pacman').style.transform = 'scaleX(-1)';
+          break;
+        case 38: // up
+          playerY = Math.max(0, playerY - speed);
+          document.querySelector('.pacman').style.transform = 'rotate(270deg)';
+          break;
+        case 39: // right
+          playerX = Math.min(maxX, playerX + speed);
+          document.querySelector('.pacman').style.transform = '';
+          break;
+        case 40: // down
+          playerY = Math.min(maxY, playerY + speed);
+          document.querySelector('.pacman').style.transform = "rotate(90deg)";
+          break;
+      }
+      // Update the player's position
+      player.style.left = playerX + 'px';
+      player.style.top = playerY + 'px';
+      console.log('player: ', playerX, playerY)
+      console.log('target: ', targetX, targetY)
+      // Check if the player has landed on the target
+      if (Math.abs(playerX + (player.offsetWidth / 2) - (targetX + (target.offsetWidth / 2))) <= 25 && Math.abs(playerY + (player.offsetHeight / 2) - (targetY + (target.offsetHeight / 2))) <= 25) {
+      // Generate a new random position for the target
+      targetX = Math.floor(Math.random() * maxX);
+      targetY = Math.floor(Math.random() * maxY);
+      // Update the target's position
+      target.style.left = targetX + 'px';
+      target.style.top = targetY + 'px';
+      // Increment the score
+      score++;
+      // Update score tracker
+      scoreDiv.innerHTML = `Score: ${score}`;
+      }
+    });
+  </script>
+</body>
+</html>

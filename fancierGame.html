@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My First Web Browser Game v2</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+    }
+    #game-container {
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+    #player {
+      width: 50px;
+      height: 50px;
+      background-color: #000;
+      position: absolute;
+    }
+    #target {
+      width: 25px;
+      height: 25px;
+      background-color: #0f0;
+      position: absolute;
+      border-radius: 100%
+    }
+  </style>
+</head>
+<body>
+  <h1>My Web Browser Game</h1>
+  <div id="game-container">
+    <div id="player"></div>
+    <div id="target"></div>
+  </div>
+  <div id="score"></div>
+  <script>
+    let score = 0;
+    let scoreDiv = document.getElementById('score');
+    // Get the game container
+    const gameContainer = document.getElementById('game-container');
+    // Get the player
+    const player = document.getElementById('player');
+    // Get the target
+    const target = document.getElementById('target');
+    // Set the initial position of the player
+    let playerX = 0;
+    let playerY = 0;
+    // Set the speed of the player
+    const speed = 50;
+    // Set the boundaries of the game container
+    const maxX = gameContainer.offsetWidth - player.offsetWidth;
+    const maxY = gameContainer.offsetHeight - player.offsetHeight;
+    // Generate a random position for the target
+    let targetX = Math.floor(Math.random() * maxX);
+    let targetY = Math.floor(Math.random() * maxY);
+    // Update the target's position
+    target.style.left = targetX + 'px';
+    target.style.top = targetY + 'px';
+    // Listen for key presses
+    document.addEventListener('keydown', (e) => {
+      // Move the player
+      switch (e.keyCode) {
+        case 37: // left
+          playerX = Math.max(0, playerX - speed);
+          break;
+        case 38: // up
+          playerY = Math.max(0, playerY - speed);
+          break;
+        case 39: // right
+          playerX = Math.min(maxX, playerX + speed);
+          break;
+        case 40: // down
+          playerY = Math.min(maxY, playerY + speed);
+          break;
+      }
+      // Update the player's position
+      player.style.left = playerX + 'px';
+      player.style.top = playerY + 'px';
+      // Check if the player has landed on the target
+      if (Math.abs(playerX - targetX) <= 25 && Math.abs(playerY - targetY) <= 25) {
+      // Generate a new random position for the target
+      targetX = Math.floor(Math.random() * maxX);
+      targetY = Math.floor(Math.random() * maxY);
+      // Update the target's position
+      target.style.left = targetX + 'px';
+      target.style.top = targetY + 'px';
+      // Increment the score
+      score++;
+      // create a new div that shows the score variable as it updates
+      scoreDiv.innerHTML = `Score: ${score}`;
+      }
+    });
+  </script>
+</body>
+</html>

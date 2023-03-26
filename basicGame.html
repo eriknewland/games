@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Web Browser Game</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+    }
+    #game-container {
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+    #player {
+      width: 50px;
+      height: 50px;
+      background-color: #000;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div id="player"></div>
+  </div>
+  <script>
+    // Get the game container
+    const gameContainer = document.getElementById('game-container');
+    // Get the player
+    const player = document.getElementById('player');
+    // Set the initial position of the player
+    let playerX = 0;
+    let playerY = 0;
+    // Set the speed of the player
+    const speed = 10;
+    // Set the boundaries of the game container
+    const maxX = gameContainer.offsetWidth - player.offsetWidth;
+    const maxY = gameContainer.offsetHeight - player.offsetHeight;
+    // Listen for key presses
+    document.addEventListener('keydown', (e) => {
+      // Move the player
+      switch (e.keyCode) {
+        case 37: // left
+          playerX = Math.max(0, playerX - speed);
+          break;
+        case 38: // up
+          playerY = Math.max(0, playerY - speed);
+          break;
+        case 39: // right
+          playerX = Math.min(maxX, playerX + speed);
+          break;
+        case 40: // down
+          playerY = Math.min(maxY, playerY + speed);
+          break;
+      }
+      // Update the player's position
+      player.style.left = playerX + 'px';
+      player.style.top = playerY + 'px';
+    });
+  </script>
+</body>
+</html>
